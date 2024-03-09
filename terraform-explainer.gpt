@@ -1,0 +1,18 @@
+tools: sys.find, sys.read, summary, security
+
+List the files in the provided directory of terraform files and read each file and describe what it will do when applied do in english language. Then summarize the entire set of actions and provide any security recommendations in the last section of the report.
+
+---
+name: summary
+description: Summarize a set of terraform files
+args: directory: directory to summarize
+tools: sys.read
+temperature: 0.7
+
+Read the files in ${directory} which are a set of terraform files. Describe what the terraform will do in english language. Ignore any variables in the reporting. Don't report in point form, instead a single paragraph. Take the perspective of an experienced terraform and cloud security guru and summarize the overall goal of the terraform.
+
+---
+name: security
+description: Check for security issues in terraform files
+
+Check the provided terraform files for security issues. If there are any, provide a list of suggested security changes for common problems. If no problems are found, return a message stating that no problems were found. In particular, consider whether anything will be made publicly available, such as s3 buckets. Summarize in a single paragraph, not point form. Take the perspective of an experienced terraform and cloud security guru and summarize the overall security posture of the terraform.
