@@ -1,0 +1,21 @@
+tools: sys.read, sys.write, sys.abort, falco-validator
+
+Write a falco rule based on the decription provided, write it to a file called
+called test.yaml and validate that. If there is no argument to the call to 
+gptscript then abort.
+
+---
+name: falco-validator
+description: Summarize a set of terraform files
+tools: sys.read
+
+#!/bin/bash
+
+if ! command -v falco >/dev/null 2>&1; then
+    echo "falco is not installed. Exiting."
+    exit 1
+fi
+
+echo "validating rules file..."
+
+falco --validate test.yaml
