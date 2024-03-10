@@ -6,7 +6,7 @@ gptscript then abort.
 
 ---
 name: falco-validator
-description: Summarize a set of terraform files
+description: Validate a falco rule file
 tools: sys.read
 
 #!/bin/bash
