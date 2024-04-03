@@ -1,4 +1,5 @@
 tools: sys.find, sys.read, sys.write, sys.abort, validate-terraform, fix-terraform
+model: gpt-3.5-turbo
 
 List the files in the provided directory. Then create a local directory called output and convert the Kubernetes manifests in the provided directory to terraform manifests and write them to the output directory. If it makes sense, create a terraform module. Also ensure that anything that should be paramaterized is, and that there is a variables file. Ensure that any variables have a default set to the original values in the Kubernetes manifest.
 
@@ -8,12 +9,12 @@ Then validate the terraform files that were created in the output directory. If 
 name: validate-terraform
 description: Validate a set of terraform files
 tools: sys.read
-temperature: 0.7
+model: gpt-3.5-turbo
 
 #!/bin/bash
 
 echo "Validating Terraform..."
-cd output || exit 1
+pushd output || exit 1
 
 # Initialize Terraform (optional, but recommended)
 terraform init
@@ -24,11 +25,14 @@ terraform validate 2>&1 | tee validate.txt
 # Remove Terraform initialization files
 rm -f ./.terraform*
 
-echo "Validation complete."
+popd
+
+echo "Validation complete..."
 
 
 ---
 name: fix-terraform
-tools: sys.read, sys.write
+tools: sys.read, sys.write, validate-terraform
+model: gpt-3.5-turbo
 
-Read the output/validate.txt file to understand any terraform errors, then try to fix those errors by rewriting the terraform files that are in the output directory.
+Read the output/validate.txt file to understand any terraform errors, then try to fix those errors by rewriting the terraform files that are in the output directory. Then validate again.
